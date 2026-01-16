@@ -17,7 +17,7 @@ const Footer = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
               </div>
-              {/* dark:text-white দেওয়া হয়েছে */}
+              {/* dark:text-white */}
               <span className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">
                 Care<span className="text-blue-600">.xyz</span>
               </span>
@@ -59,11 +59,11 @@ const Footer = () => {
               </li>
               <li className="flex items-center space-x-3">
                 <span className="bg-blue-50 dark:bg-blue-900/30 p-1.5 rounded-md text-blue-600 dark:text-blue-400">📞</span>
-                <span>+880 1234 567890</span>
+                <span>+880 1851121472</span>
               </li>
               <li className="flex items-center space-x-3">
                 <span className="bg-blue-50 dark:bg-blue-900/30 p-1.5 rounded-md text-blue-600 dark:text-blue-400">✉️</span>
-                <span>support@care.xyz</span>
+                <span>hmdsakhawat236@gmail.com</span>
               </li>
             </ul>
           </div>
