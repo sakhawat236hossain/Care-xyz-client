@@ -4,6 +4,7 @@ import ServicesSection from "@/components/HomePage/ServicesSection/ServicesSecti
 import WhyChooseUs from "@/components/HomePage/WhyChooseUs/WhyChooseUs";
 import HowItWorks from "@/components/HowItWorks/HowItWorks";
 import FeaturedCaregivers from "@/components/HomePage/FeaturedCaregivers/FeaturedCaregivers";
+import Testimonials from "@/components/HomePage/Testimonials/Testimonials";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <WhyChooseUs />
       <HowItWorks></HowItWorks>
       <FeaturedCaregivers></FeaturedCaregivers>
+      <Testimonials></Testimonials>
     </main>
   );
 }
