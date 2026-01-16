@@ -6,6 +6,7 @@ import HowItWorks from "@/components/HowItWorks/HowItWorks";
 import FeaturedCaregivers from "@/components/HomePage/FeaturedCaregivers/FeaturedCaregivers";
 import Testimonials from "@/components/HomePage/Testimonials/Testimonials";
 import CallToAction from "@/components/HomePage/CallToAction/CallToAction";
+import FAQ from "@/components/HomePage/FAQ/FAQ";
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
       <FeaturedCaregivers></FeaturedCaregivers>
       <Testimonials></Testimonials>
       <CallToAction></CallToAction>
+      <FAQ></FAQ>
     </main>
   );
 }

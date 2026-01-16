@@ -59,7 +59,7 @@ const CallToAction = () => {
             </div>
 
             {/* Right side: Modern Button */}
-            <div className="mt-12 lg:mt-0">
+            <div className="mt-12 lg:mt-0 ">
               <button className="group relative flex items-center gap-5 bg-blue-600 hover:bg-blue-500 text-white p-2 pr-8 rounded-3xl font-bold transition-all duration-300 shadow-[0_0_40px_rgba(37,99,235,0.3)] active:scale-95">
                 {/* Icon Container */}
                 <div className="bg-white/10 p-4 rounded-2xl group-hover:bg-white group-hover:scale-110 transition-all duration-300">
@@ -67,9 +67,9 @@ const CallToAction = () => {
                 </div>
                 
                 {/* Button Text */}
-                <div className="text-left leading-tight">
+                <div className="text-left leading-tight cursor-pointer">
                   <span className="block text-[11px] uppercase tracking-tighter opacity-70 group-hover:opacity-100">Talk to us now</span>
-                  <span className="text-xl">+1 (800) 123-4567</span>
+                  <span className="text-xl">01851121472</span>
                 </div>
 
                 <ArrowRight size={20} className="ml-2 group-hover:translate-x-2 transition-transform duration-300" />
