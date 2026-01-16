@@ -1,7 +1,8 @@
 "use client";
+import "./globals.css"; 
 
 import { useEffect } from "react";
-import { RefreshCcw, Home, AlertCircle } from "lucide-react"; // আপনি যদি Lucide icons ব্যবহার করেন
+import { RefreshCcw, Home, AlertCircle } from "lucide-react"; 
 
 export default function Error({ error, reset }) {
   useEffect(() => {
