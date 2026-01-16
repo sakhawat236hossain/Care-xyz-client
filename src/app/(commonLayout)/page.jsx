@@ -3,6 +3,7 @@ import StatsSection from "@/components/HomePage/StatsSection/StatsSection";
 import ServicesSection from "@/components/HomePage/ServicesSection/ServicesSection";
 import WhyChooseUs from "@/components/HomePage/WhyChooseUs/WhyChooseUs";
 import HowItWorks from "@/components/HowItWorks/HowItWorks";
+import FeaturedCaregivers from "@/components/HomePage/FeaturedCaregivers/FeaturedCaregivers";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <ServicesSection />
       <WhyChooseUs />
       <HowItWorks></HowItWorks>
+      <FeaturedCaregivers></FeaturedCaregivers>
     </main>
   );
 }
