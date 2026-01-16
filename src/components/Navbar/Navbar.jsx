@@ -10,11 +10,10 @@ const Navbar = () => {
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
-    { name: "Services", path: "/#services" },
+    { name: "Services", path: "/services" },
   ];
 
   return (
-    // dark:bg-gray-950/80 এবং dark:border-gray-800 যোগ করা হয়েছে
     <nav className="fixed w-full top-0 z-50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl border-b border-gray-100 dark:border-gray-800 shadow-sm transition-all duration-300">
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
