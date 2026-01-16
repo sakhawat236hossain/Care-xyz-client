@@ -5,6 +5,7 @@ import WhyChooseUs from "@/components/HomePage/WhyChooseUs/WhyChooseUs";
 import HowItWorks from "@/components/HowItWorks/HowItWorks";
 import FeaturedCaregivers from "@/components/HomePage/FeaturedCaregivers/FeaturedCaregivers";
 import Testimonials from "@/components/HomePage/Testimonials/Testimonials";
+import CallToAction from "@/components/HomePage/CallToAction/CallToAction";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <HowItWorks></HowItWorks>
       <FeaturedCaregivers></FeaturedCaregivers>
       <Testimonials></Testimonials>
+      <CallToAction></CallToAction>
     </main>
   );
 }
