@@ -3,6 +3,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 import GoogleProvider from "next-auth/providers/google";
+import GitHubProvider from "next-auth/providers/github";
 
 export const authOptions = {
   providers: [
@@ -45,14 +46,20 @@ export const authOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
+
+    GitHubProvider({
+      clientId: process.env.GITHUB_ID,
+      clientSecret: process.env.GITHUB_SECRET,
+    }),
   ],
 
   callbacks: {
     async signIn({ user, account }) {
-      if (account.provider === "google") {
+      if (account.provider === "google" || account.provider === "github") {
         try {
           const { name, email, image } = user;
           const userCollection = await dbConnect(collections.USERS);
+          
           const isExist = await userCollection.findOne({ email });
 
           if (!isExist) {
@@ -61,13 +68,13 @@ export const authOptions = {
               email,
               image,
               role: "user",
-              provider: "google",
+              provider: account.provider,
               createdAt: new Date(),
             });
           }
           return true;
         } catch (error) {
-          console.error("Error saving google user:", error);
+          console.error("Error saving social user:", error);
           return false;
         }
       }
@@ -78,7 +85,7 @@ export const authOptions = {
       if (user) {
         token.role = user.role;
         token.id = user.id;
-      } else if (!token.role) {
+      } else {
         const userCollection = await dbConnect(collections.USERS);
         const dbUser = await userCollection.findOne({ email: token.email });
         if (dbUser) {
