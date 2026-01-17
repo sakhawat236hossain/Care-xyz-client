@@ -64,6 +64,25 @@ const LoginPage = () => {
             Log In
           </button>
         </div>
+        <div className="mt-6">
+  <div className="relative mb-6">
+    <div className="absolute inset-0 flex items-center">
+      <div className="w-full border-t border-zinc-200 dark:border-zinc-800"></div>
+    </div>
+    <div className="relative flex justify-center text-xs uppercase">
+      <span className="bg-white dark:bg-zinc-900 px-2 text-zinc-400">Or continue with</span>
+    </div>
+  </div>
+
+  <button
+    onClick={() => signIn("google", { callbackUrl: "/" })}
+    type="button"
+    className="cursor-pointer w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all font-semibold"
+  >
+    <img src="https://www.svgrepo.com/show/355037/google.svg" className="w-5 h-5" alt="Google" />
+    Continue with Google
+  </button>
+</div>
 
         <p className="mt-6 text-center text-sm text-zinc-500">
           New here? <Link href="/register" className="text-blue-600 font-bold hover:underline">Create an account</Link>
