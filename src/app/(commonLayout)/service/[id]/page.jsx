@@ -142,7 +142,7 @@ const ServiceDetails = async ({ params }) => {
 
                                 {/* Booking Button */}
                                 <Link href={`/booking/${service._id}`} className="block">
-                                    <button className="w-full py-4 bg-zinc-900 dark:bg-blue-600 text-white text-lg font-semibold rounded-xl shadow-lg hover:bg-blue-600 dark:hover:bg-blue-700 transition-all duration-300 hover:shadow-xl active:scale-98 flex items-center justify-center gap-3 group">
+                                    <button className="cursor-pointer w-full py-4 bg-zinc-900 dark:bg-blue-600 text-white text-lg font-semibold rounded-xl shadow-lg hover:bg-blue-600 dark:hover:bg-blue-700 transition-all duration-300 hover:shadow-xl active:scale-98 flex items-center justify-center gap-3 group">
                                         <span>Book This Service</span>
                                         <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
