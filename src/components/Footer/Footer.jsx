@@ -23,8 +23,7 @@ const Footer = () => {
               </span>
             </Link>
             <p className="text-gray-500 dark:text-gray-400 leading-relaxed text-sm">
-              আপনার পরিবারের সদস্যদের নিরাপদ এবং নির্ভরযোগ্য সেবা দিতে আমরা প্রতিশ্রুতিবদ্ধ। শিশু, বৃদ্ধ এবং অসুস্থ ব্যক্তিদের জন্য বিশেষায়িত কেয়ারগিভিং সার্ভিস।
-            </p>
+We are committed to providing safe and reliable services to your family members. Specialized caregiving services for children, the elderly, and the sick.            </p>
           </div>
 
           {/* Column 2: Quick Links */}
