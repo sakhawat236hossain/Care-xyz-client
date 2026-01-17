@@ -1,6 +1,5 @@
 import Hero from "@/components/HomePage/Hero/Hero";
 import StatsSection from "@/components/HomePage/StatsSection/StatsSection";
-import ServicesSection from "@/components/HomePage/ServicesSection/ServicesSection";
 import WhyChooseUs from "@/components/HomePage/WhyChooseUs/WhyChooseUs";
 import HowItWorks from "@/components/HowItWorks/HowItWorks";
 import FeaturedCaregivers from "@/components/HomePage/FeaturedCaregivers/FeaturedCaregivers";
@@ -15,7 +14,6 @@ export default function Home() {
       
       <StatsSection />
       
-      <ServicesSection />
       
       <WhyChooseUs />
       
@@ -28,6 +26,7 @@ export default function Home() {
       <FAQ />
       
       <CallToAction />
+      <servicePage />
     </main>
   );
 }
