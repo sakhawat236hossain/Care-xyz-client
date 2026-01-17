@@ -1,44 +1,69 @@
-import NextAuth from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
-const user = { id: 1, name: "J Smith", email: "test@gmail.com"}
+import { collections, dbConnect } from "@/lib/dbConnect";
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcrypt";
 
 export const authOptions = {
-
-
-  // Configure one or more authentication providers
   providers: [
-   CredentialsProvider({
-    //  (e.g. 'Sign in with...')
-    name: 'Credentials',
-    credentials: {
-     email: { label: "Email", type: "text", placeholder: "your Email" },
-    //  label: "Username", type: "text", placeholder: "jsmith" 
-      password: { label: "Password", type: "password", placeholder: "your password" }
-    },
-    async authorize(credentials, req) {
-      
-    //   const res = await fetch("/your/endpoint", {
-    //     method: 'POST',
-    //     body: JSON.stringify(credentials),
-    //     headers: { "Content-Type": "application/json" }
-    //   })
-    //   const user = await res.json()
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) return null;
 
-      // If no error and we have user data, return it
-    //   if (res.ok && user) {
-    //     return user
-    //   }
-      // Return null if user data could not be retrieved
-      
-       console.log(credentials);
-       if(user){
-        return user
-       }
-      return null
-    }
-  })
+        const userCollection = await dbConnect(collections.USERS);
+        const user = await userCollection.findOne({ email: credentials.email });
+
+        if (!user) {
+          throw new Error("No user found with this email");
+        }
+
+        const isPasswordValid = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
+
+        if (!isPasswordValid) {
+          throw new Error("Invalid password");
+        }
+
+        return {
+          id: user._id.toString(),
+          name: user.name,
+          email: user.email,
+          image: user.image,
+          role: user.role || "user", 
+        };
+      },
+    }),
   ],
-}
 
-const handler= NextAuth(authOptions);
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.role = user.role;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user.role = token.role;
+      }
+      return session; 
+    },
+  },
+  
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: "/login", 
+  },
+};
+
+const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };

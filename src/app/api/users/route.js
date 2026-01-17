@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 
 export const POST = async (request) => {
   try {
-    const { name, email, password,image } = await request.json();
+    const { name, email, password,image,phone } = await request.json();
     const userCollection = await dbConnect(collections.USERS);
 
     const isExist = await userCollection.findOne({ email });
@@ -18,6 +18,7 @@ export const POST = async (request) => {
       name,
       email,
       password: hashedPassword,
+      phone,
       image,
       role: "user", 
       createdAt: new Date(),

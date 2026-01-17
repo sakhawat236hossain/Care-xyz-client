@@ -25,7 +25,7 @@ const Navbar = () => {
           
           {/* Logo Section */}
           <Link href="/" className="flex items-center space-x-2 group">
-            <div className="bg-blue-600 p-1.5 rounded-lg text-white">
+            <div className="bg-blue-600 p-1.5 rounded-lg text-white transition-transform group-hover:scale-110">
               <Heart size={20} fill="currentColor" />
             </div>
             <span className="text-xl font-black tracking-tighter text-zinc-900 dark:text-white">
@@ -56,7 +56,7 @@ const Navbar = () => {
                 );
               })}
               
-              {/* My Bookings Link (Visible to All) */}
+              {/* My Bookings Link */}
               <Link 
                 href="/my-bookings" 
                 className={`ml-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${
@@ -82,25 +82,27 @@ const Navbar = () => {
                     <LayoutDashboard size={16} />
                     Dashboard
                   </Link>
+                  
+                  {/* Updated Log Out Button with Icon and Text */}
                   <button 
                     onClick={() => signOut()} 
-                    className="p-2.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-all"
-                    title="Log Out"
+                    className=" cursor-pointer flex items-center gap-2 px-4 py-2.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-all font-bold text-sm"
                   >
-                    <LogOut size={20} />
+                    <LogOut size={18} />
+                    <span>Log Out</span>
                   </button>
                 </div>
               ) : (
                 <>
                   <button 
                     onClick={() => signIn()} 
-                    className="text-sm font-bold text-zinc-600 dark:text-zinc-400 hover:text-blue-600 transition flex items-center gap-2"
+                    className="cursor-pointer text-sm font-bold text-zinc-600 dark:text-zinc-400 hover:text-blue-600 transition flex items-center gap-2"
                   >
                     <LogIn size={18} />
                     Log In
                   </button>
-                  <Link href="/register" className="bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:scale-105 transition-all shadow-xl shadow-blue-500/20">
-                    Join Now
+                  <Link href="/register" className="cursor-pointer bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:scale-105 transition-all shadow-xl shadow-blue-500/20">
+                    Register
                   </Link>
                 </>
               )}
@@ -110,7 +112,7 @@ const Navbar = () => {
           {/* Mobile Menu Button */}
           <button 
             onClick={() => setIsOpen(!isOpen)} 
-            className="md:hidden p-2 rounded-xl bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100"
+            className="md:hidden p-2 rounded-xl bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 transition-colors cursor-pointer" 
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -128,7 +130,7 @@ const Navbar = () => {
                   onClick={() => setIsOpen(false)} 
                   className={`block px-5 py-3 rounded-2xl font-bold transition-all ${
                     isActive 
-                    ? "bg-blue-600 text-white" 
+                    ? "bg-blue-600 text-white shadow-lg shadow-blue-500/20" 
                     : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900"
                   }`}
                 >
@@ -144,14 +146,14 @@ const Navbar = () => {
                   <Link 
                     href="/dashboard" 
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-center gap-2 py-4 bg-zinc-900 text-white rounded-2xl font-bold"
+                    className="flex items-center justify-center gap-2 py-4 bg-zinc-900 text-white rounded-2xl font-bold shadow-lg"
                   >
                     <LayoutDashboard size={18} />
                     Go to Dashboard
                   </Link>
                   <button 
                     onClick={() => { signOut(); setIsOpen(false); }} 
-                    className="py-4 bg-red-50 text-red-600 rounded-2xl font-bold flex items-center justify-center gap-2"
+                    className="py-4  bg-red-50 text-red-600 rounded-2xl font-bold flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <LogOut size={18} />
                     Log Out
@@ -161,7 +163,7 @@ const Navbar = () => {
                 <div className="grid grid-cols-2 gap-3">
                   <button 
                     onClick={() => { signIn(); setIsOpen(false); }} 
-                    className="py-4 bg-zinc-100 dark:bg-zinc-800 rounded-2xl font-bold text-zinc-700 dark:text-zinc-300"
+                    className="py-4 bg-zinc-100 dark:bg-zinc-800 rounded-2xl font-bold text-zinc-700 dark:text-zinc-300 cursor-pointer"
                   >
                     Log In
                   </button>
@@ -170,7 +172,7 @@ const Navbar = () => {
                     onClick={() => setIsOpen(false)} 
                     className="text-center py-4 bg-blue-600 text-white rounded-2xl font-bold"
                   >
-                   Register
+                    Register
                   </Link>
                 </div>
               )}
