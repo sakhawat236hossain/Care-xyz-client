@@ -25,7 +25,7 @@ export const authOptions = {
 
         const isPasswordValid = await bcrypt.compare(
           credentials.password,
-          user.password,
+          user.password
         );
 
         if (!isPasswordValid) {
@@ -37,7 +37,7 @@ export const authOptions = {
           name: user.name,
           email: user.email,
           image: user.image,
-          role: user.role || "user",
+          role: user.role || "user", // ডাটাবেজ থেকে রোল নিচ্ছে
         };
       },
     }),
@@ -59,7 +59,6 @@ export const authOptions = {
         try {
           const { name, email, image } = user;
           const userCollection = await dbConnect(collections.USERS);
-
           const isExist = await userCollection.findOne({ email });
 
           if (!isExist) {
@@ -67,7 +66,7 @@ export const authOptions = {
               name,
               email,
               image,
-              role: "user",
+              role: "user", // নতুন ইউজারের জন্য ডিফল্ট
               provider: account.provider,
               createdAt: new Date(),
             });
@@ -81,22 +80,33 @@ export const authOptions = {
       return true;
     },
 
-async jwt({ token, user, trigger, session }) {
-  if (user) {
-    token.role = user.role || "user";
-    token.id = user.id;
-  }
-  
-  if (trigger === "update" && session?.role) {
-    token.role = session.role;
-  }
-  
-  return token;
-},
+    async jwt({ token, user, trigger, session }) {
+      // ১. লগইন করার সময় (Credentials বা Social)
+      if (user) {
+        token.id = user.id;
+        
+        // সোশ্যাল লগইনের ক্ষেত্রে ডাটাবেজ থেকে লেটেস্ট রোল খুঁজে বের করা
+        const userCollection = await dbConnect(collections.USERS);
+        const dbUser = await userCollection.findOne({ email: token.email });
+        
+        if (dbUser) {
+          token.role = dbUser.role || "user";
+        } else {
+          token.role = user.role || "user";
+        }
+      }
+
+      // ২. প্রোফাইল আপডেট ট্রিগার করলে
+      if (trigger === "update" && session?.role) {
+        token.role = session.role;
+      }
+
+      return token;
+    },
 
     async session({ session, token }) {
       if (session.user) {
-        session.user.role = token.role;
+        session.user.role = token.role; // টোকেন থেকে রোল সেশনে যাচ্ছে
         session.user.id = token.id;
       }
       return session;

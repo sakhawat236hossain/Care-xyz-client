@@ -23,8 +23,7 @@ export default function DashboardLayout({ children }) {
   const role = session?.user?.role;
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const links =
-    role === "admin"
+  const links = role === "admin"
       ? [
           { name: "Overview", path: "/dashboard", icon: <LayoutDashboard size={20} /> },
           { name: "All Bookings", path: "/dashboard/admin/all-bookings", icon: <CalendarCheck size={20} /> },
