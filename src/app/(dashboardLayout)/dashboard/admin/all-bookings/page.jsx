@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import { Loader2, CheckCircle, XCircle } from 'lucide-react';
+import { Loader2, CheckCircle, XCircle, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const AllBookings = () => {
@@ -23,34 +23,43 @@ const AllBookings = () => {
 
     useEffect(() => {
         fetchAllBookings();
-
-        const interval = setInterval(() => {
-            fetchAllBookings();
-        }, 5000); 
-
+        const interval = setInterval(fetchAllBookings, 5000); 
         return () => clearInterval(interval);
     }, []);
 
+    // update statue
     const handleUpdateStatus = async (id, newStatus) => {
         try {
             const res = await fetch(`/api/admin/update-status/${id}`, {
                 method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: newStatus }),
             });
-            
-            const data = await res.json();
-
             if (res.ok) {
-                toast.success(`Booking ${newStatus} successfully!`);
-                await fetchAllBookings(); 
-            } else {
-                toast.error(data.message || "Failed to update");
+                toast.success(`Marked as ${newStatus}`);
+                fetchAllBookings(); 
             }
         } catch (err) {
             toast.error("Update failed");
+        }
+    };
+
+  // delete
+    const handleDelete = async (id) => {
+        if (!confirm("Are you sure you want to delete this booking?")) return;
+
+        try {
+            const res = await fetch(`/api/admin/delete-booking/${id}`, {
+                method: 'DELETE',
+            });
+            if (res.ok) {
+                toast.success("Booking deleted!");
+                fetchAllBookings(); 
+            } else {
+                toast.error("Delete failed");
+            }
+        } catch (err) {
+            toast.error("Error deleting booking");
         }
     };
 
@@ -78,67 +87,55 @@ const AllBookings = () => {
                                 <th className="p-6 text-[10px] font-black uppercase tracking-widest text-zinc-500">Location</th>
                                 <th className="p-6 text-[10px] font-black uppercase tracking-widest text-zinc-500">Amount</th>
                                 <th className="p-6 text-[10px] font-black uppercase tracking-widest text-zinc-500">Status</th>
-                                <th className="p-6 text-[10px] font-black uppercase tracking-widest text-zinc-500">Actions</th>
+                                <th className="p-6 text-[10px] font-black uppercase tracking-widest text-zinc-500 text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
                             {bookings.map((booking) => (
-                                <tr key={booking._id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors group">
+                                <tr key={booking._id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors">
                                     <td className="p-6">
                                         <div className="flex flex-col">
-                                            <span className="font-black text-zinc-900 dark:text-white uppercase text-sm tracking-tight">
-                                                {booking.serviceTitle}
-                                            </span>
-                                            <span className="text-[10px] font-bold text-zinc-400">
-                                                {booking.userEmail}
-                                            </span>
+                                            <span className="font-black text-zinc-900 dark:text-white uppercase text-sm tracking-tight">{booking.serviceTitle}</span>
+                                            <span className="text-[10px] font-bold text-zinc-400">{booking.userEmail}</span>
                                         </div>
                                     </td>
-
                                     <td className="p-6">
                                         <div className="flex flex-col text-[11px] font-bold text-zinc-500 uppercase">
                                             <span>{booking.location?.area}, {booking.location?.district}</span>
-                                            <span className="text-[9px] text-zinc-400 normal-case font-medium">{booking.location?.address}</span>
                                         </div>
                                     </td>
-
                                     <td className="p-6">
                                         <span className="font-black text-blue-600">${booking.totalCost}</span>
                                     </td>
-
                                     <td className="p-6">
                                         <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-tighter border ${
-                                            booking.status === 'confirmed' 
-                                            ? 'bg-emerald-50 text-emerald-600 border-emerald-100' 
-                                            : booking.status === 'cancelled'
-                                            ? 'bg-red-50 text-red-600 border-red-100'
-                                            : 'bg-orange-50 text-orange-600 border-orange-100'
+                                            booking.status === 'confirmed' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 
+                                            booking.status === 'cancelled' ? 'bg-red-50 text-red-600 border-red-100' : 
+                                            'bg-orange-50 text-orange-600 border-orange-100'
                                         }`}>
                                             {booking.status || 'pending'}
                                         </span>
                                     </td>
-
                                     <td className="p-6">
-                                        <div className="flex items-center gap-2">
-                                            {/* Confirm Button */}
+                                        <div className="flex items-center justify-center gap-2">
                                             {booking.status !== 'confirmed' && booking.status !== 'cancelled' && (
-                                                <button 
-                                                    onClick={() => handleUpdateStatus(booking._id, 'confirmed')}
-                                                    className="p-2 bg-emerald-500/10 text-emerald-600 rounded-xl hover:bg-emerald-500 hover:text-white transition-all shadow-sm"
-                                                >
+                                                <button onClick={() => handleUpdateStatus(booking._id, 'confirmed')} className="p-2 cursor-pointer bg-emerald-500/10 text-emerald-600 rounded-xl hover:bg-emerald-500 hover:text-white transition-all">
                                                     <CheckCircle size={18} />
                                                 </button>
                                             )}
-
-                                            {/* Cancel Button */}
                                             {booking.status !== 'cancelled' && (
-                                                <button 
-                                                    onClick={() => handleUpdateStatus(booking._id, 'cancelled')}
-                                                    className="p-2 bg-red-500/10 text-red-600 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm"
-                                                >
+                                                <button onClick={() => handleUpdateStatus(booking._id, 'cancelled')} className="p-2 cursor-pointer bg-orange-500/10 text-orange-600 rounded-xl hover:bg-orange-500 hover:text-white transition-all">
                                                     <XCircle size={18} />
                                                 </button>
                                             )}
+                                            {/* Delete Button */}
+                                            <button 
+                                                onClick={() => handleDelete(booking._id)} 
+                                                className="p-2 cursor-pointer bg-red-500/10 text-red-600 rounded-xl hover:bg-red-600 hover:text-white transition-all"
+                                                title="Delete Permanent"
+                                            >
+                                                <Trash2 size={18} />
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -146,12 +143,6 @@ const AllBookings = () => {
                         </tbody>
                     </table>
                 </div>
-                
-                {bookings.length === 0 && (
-                    <div className="p-20 text-center font-black text-zinc-400 uppercase tracking-widest">
-                        No bookings found in the system.
-                    </div>
-                )}
             </div>
         </div>
     );
