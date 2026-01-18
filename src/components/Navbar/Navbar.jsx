@@ -56,37 +56,36 @@ const Navbar = () => {
                 );
               })}
               
-              {/* My Bookings Link */}
-              <Link 
-                href="/my-bookings" 
-                className={`ml-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${
-                  pathname === "/my-bookings" 
-                  ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30" 
-                  : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-blue-50"
-                }`}
-              >
-                My Bookings
-              </Link>
+              {/* Dashboard Link (Simple Entry) */}
+              {status === "authenticated" && (
+                <Link 
+                  href="/dashboard" 
+                  className={`ml-2 flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${
+                    pathname.startsWith("/dashboard") 
+                    ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30" 
+                    : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-blue-50"
+                  }`}
+                >
+                  <LayoutDashboard size={14} />
+                  Dashboard
+                </Link>
+              )}
             </div>
             
             <div className="h-5 w-[1px] bg-zinc-200 dark:bg-zinc-800 mx-6"></div>
 
-            {/* Auth/Dashboard Logic */}
+            {/* Auth Logic */}
             <div className="flex items-center space-x-4">
               {status === "authenticated" ? (
                 <div className="flex items-center gap-3">
-                  <Link 
-                    href="/dashboard" 
-                    className="flex items-center gap-2 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 px-5 py-2.5 rounded-xl text-sm font-bold hover:scale-105 transition-all shadow-xl"
-                  >
-                    <LayoutDashboard size={16} />
-                    Dashboard
-                  </Link>
-                  
-                  {/* Updated Log Out Button with Icon and Text */}
+                  <div className="flex flex-col items-end mr-1 leading-tight">
+                    <span className="text-[9px] font-bold text-blue-500 uppercase tracking-widest">{session.user.role}</span>
+                    <span className="text-xs font-black text-zinc-800 dark:text-zinc-200">{session.user.name.split(' ')[0]}</span>
+                  </div>
+
                   <button 
                     onClick={() => signOut()} 
-                    className=" cursor-pointer flex items-center gap-2 px-4 py-2.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-all font-bold text-sm"
+                    className="cursor-pointer flex items-center gap-2 px-4 py-2.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-all font-bold text-sm"
                   >
                     <LogOut size={18} />
                     <span>Log Out</span>
@@ -139,7 +138,6 @@ const Navbar = () => {
               );
             })}
             
-            {/* Mobile Auth Buttons */}
             <div className="grid grid-cols-1 gap-3 pt-6">
               {status === "authenticated" ? (
                 <>
@@ -149,11 +147,11 @@ const Navbar = () => {
                     className="flex items-center justify-center gap-2 py-4 bg-zinc-900 text-white rounded-2xl font-bold shadow-lg"
                   >
                     <LayoutDashboard size={18} />
-                    Go to Dashboard
+                    Dashboard ({session.user.role})
                   </Link>
                   <button 
                     onClick={() => { signOut(); setIsOpen(false); }} 
-                    className="py-4  bg-red-50 text-red-600 rounded-2xl font-bold flex items-center justify-center gap-2 cursor-pointer"
+                    className="py-4 bg-red-50 text-red-600 rounded-2xl font-bold flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <LogOut size={18} />
                     Log Out

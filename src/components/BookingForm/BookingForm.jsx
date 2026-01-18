@@ -445,7 +445,6 @@ export default function BookingForm({ service }) {
     [],
   );
 
-  // স্টেট ম্যানেজমেন্ট
   const [duration, setDuration] = useState(1);
   const [durationType, setDurationType] = useState("hours");
   const [selectedRegion, setSelectedRegion] = useState("");
