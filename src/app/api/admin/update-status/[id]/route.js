@@ -3,7 +3,6 @@ import { ObjectId } from "mongodb";
 import { NextResponse } from "next/server";
 
 export const PATCH = async (request, { params }) => {
-    // এখানে await params ব্যবহার করা জরুরি Next.js এর লেটেস্ট ভার্সনে
     const { id } = await params; 
     const { status } = await request.json();
 
@@ -12,7 +11,6 @@ export const PATCH = async (request, { params }) => {
     try {
         const bookingCollection = await dbConnect(collections.BOOKINGS);
         
-        // আইডি ভ্যালিড কি না চেক করা
         if (!ObjectId.isValid(id)) {
             return NextResponse.json({ message: "Invalid Booking ID format" }, { status: 400 });
         }
