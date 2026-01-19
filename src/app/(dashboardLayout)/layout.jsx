@@ -52,6 +52,11 @@ export default function DashboardLayout({ children }) {
             path: "/dashboard/admin/add-service",
             icon: <PlusCircle size={20} />,
           },
+          {
+            name: "Profile",
+            path: "/dashboard/user/profile",
+            icon: <UserCircle size={20} />,
+          },
         ]
       : [
           {
