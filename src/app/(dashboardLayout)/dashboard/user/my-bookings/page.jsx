@@ -133,7 +133,7 @@ const MyBookings = () => {
                                         
                                         <button 
                                             onClick={() => handleCancel(item._id)}
-                                            className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white p-4 rounded-2xl transition-all duration-300 font-black text-[10px] uppercase tracking-widest group/btn"
+                                            className="flex-1 cursor-pointer sm:flex-none flex items-center justify-center gap-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white p-4 rounded-2xl transition-all duration-300 font-black text-[10px] uppercase tracking-widest group/btn"
                                         >
                                             <Trash2 size={16} className="group-hover/btn:animate-bounce" /> Cancel
                                         </button>
