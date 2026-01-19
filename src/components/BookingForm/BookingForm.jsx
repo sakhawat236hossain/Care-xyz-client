@@ -612,7 +612,7 @@ export default function BookingForm({ service }) {
           </div>
           <button
             type="submit"
-            className="bg-white text-zinc-900 px-10 py-3 rounded-xl font-black hover:scale-105 transition-all"
+            className="bg-white text-zinc-900 px-10 py-3 rounded-xl font-black hover:scale-105 transition-all cursor-pointer"
           >
             Confirm
           </button>
