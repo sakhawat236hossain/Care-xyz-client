@@ -37,7 +37,7 @@ export const authOptions = {
           name: user.name,
           email: user.email,
           image: user.image,
-          role: user.role || "user", // ডাটাবেজ থেকে রোল নিচ্ছে
+          role: user.role || "user", 
         };
       },
     }),
@@ -66,7 +66,7 @@ export const authOptions = {
               name,
               email,
               image,
-              role: "user", // নতুন ইউজারের জন্য ডিফল্ট
+              role: "user",
               provider: account.provider,
               createdAt: new Date(),
             });
@@ -81,11 +81,9 @@ export const authOptions = {
     },
 
     async jwt({ token, user, trigger, session }) {
-      // ১. লগইন করার সময় (Credentials বা Social)
       if (user) {
         token.id = user.id;
         
-        // সোশ্যাল লগইনের ক্ষেত্রে ডাটাবেজ থেকে লেটেস্ট রোল খুঁজে বের করা
         const userCollection = await dbConnect(collections.USERS);
         const dbUser = await userCollection.findOne({ email: token.email });
         
@@ -96,7 +94,6 @@ export const authOptions = {
         }
       }
 
-      // ২. প্রোফাইল আপডেট ট্রিগার করলে
       if (trigger === "update" && session?.role) {
         token.role = session.role;
       }
@@ -106,7 +103,7 @@ export const authOptions = {
 
     async session({ session, token }) {
       if (session.user) {
-        session.user.role = token.role; // টোকেন থেকে রোল সেশনে যাচ্ছে
+        session.user.role = token.role; 
         session.user.id = token.id;
       }
       return session;

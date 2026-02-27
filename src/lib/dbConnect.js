@@ -33,8 +33,8 @@ export const dbConnect = async (collectionName) => {
 };
 
 export const collections = {
-  SERVICES: "services", 
+  SERVICES: "services",
   USERS: "users",
   BOOKINGS: "bookings",
-  CAREGIVERS: "caregivers"
+  CAREGIVERS: "caregivers",
 };
