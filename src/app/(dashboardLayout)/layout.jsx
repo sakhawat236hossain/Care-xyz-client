@@ -1,4 +1,3 @@
-"use client";
 import "../globals.css";
 import { useState } from "react";
 import { useSession, signOut } from "next-auth/react";
@@ -18,70 +17,10 @@ import {
   PlusCircle,
 } from "lucide-react";
 
-export default function DashboardLayout({ children }) {
-  const { data: session } = useSession();
+function SidebarContent({ links, session, role, setIsSidebarOpen }) {
   const pathname = usePathname();
-  const role = session?.user?.role;
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const links =
-    role === "admin"
-      ? [
-          {
-            name: "Overview",
-            path: "/dashboard",
-            icon: <LayoutDashboard size={20} />,
-          },
-          {
-            name: "All Bookings",
-            path: "/dashboard/admin/all-bookings",
-            icon: <CalendarCheck size={20} />,
-          },
-          {
-            name: "Manage Services",
-            path: "/dashboard/admin/manage-services",
-            icon: <Briefcase size={20} />,
-          },
-          {
-            name: "Manage Users",
-            path: "/dashboard/admin/manage-users",
-            icon: <Users size={20} />,
-          },
-          {
-            name: "Add Service",
-            path: "/dashboard/admin/add-service",
-            icon: <PlusCircle size={20} />,
-          },
-          {
-            name: "Profile",
-            path: "/dashboard/user/profile",
-            icon: <UserCircle size={20} />,
-          },
-        ]
-      : [
-          {
-            name: "Overview",
-            path: "/dashboard",
-            icon: <LayoutDashboard size={20} />,
-          },
-          {
-            name: "My Bookings",
-            path: "/dashboard/user/my-bookings",
-            icon: <CalendarCheck size={20} />,
-          },
-          {
-            name: "Profile",
-            path: "/dashboard/user/profile",
-            icon: <UserCircle size={20} />,
-          },
-          {
-            name: "Settings",
-            path: "/dashboard/user/settings",
-            icon: <Settings size={20} />,
-          },
-        ];
-
-  const SidebarContent = () => (
+  return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Logo Area */}
       <div className="p-8 flex justify-between items-center shrink-0">
@@ -156,12 +95,81 @@ export default function DashboardLayout({ children }) {
       </div>
     </div>
   );
+}
+
+export default function DashboardLayout({ children }) {
+  const { data: session } = useSession();
+  const pathname = usePathname();
+  const role = session?.user?.role;
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const links =
+    role === "admin"
+      ? [
+          {
+            name: "Overview",
+            path: "/dashboard",
+            icon: <LayoutDashboard size={20} />,
+          },
+          {
+            name: "All Bookings",
+            path: "/dashboard/admin/all-bookings",
+            icon: <CalendarCheck size={20} />,
+          },
+          {
+            name: "Manage Services",
+            path: "/dashboard/admin/manage-services",
+            icon: <Briefcase size={20} />,
+          },
+          {
+            name: "Manage Users",
+            path: "/dashboard/admin/manage-users",
+            icon: <Users size={20} />,
+          },
+          {
+            name: "Add Service",
+            path: "/dashboard/admin/add-service",
+            icon: <PlusCircle size={20} />,
+          },
+          {
+            name: "Profile",
+            path: "/dashboard/user/profile",
+            icon: <UserCircle size={20} />,
+          },
+        ]
+      : [
+          {
+            name: "Overview",
+            path: "/dashboard",
+            icon: <LayoutDashboard size={20} />,
+          },
+          {
+            name: "My Bookings",
+            path: "/dashboard/user/my-bookings",
+            icon: <CalendarCheck size={20} />,
+          },
+          {
+            name: "Profile",
+            path: "/dashboard/user/profile",
+            icon: <UserCircle size={20} />,
+          },
+          {
+            name: "Settings",
+            path: "/dashboard/user/settings",
+            icon: <Settings size={20} />,
+          },
+        ];
 
   return (
     <div className="flex h-screen bg-[#F8FAFC] dark:bg-zinc-950 overflow-hidden">
       {/* --- Desktop Sidebar (Fixed) --- */}
       <aside className="w-72 bg-white dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800 hidden md:flex flex-col h-full shrink-0 sticky top-0">
-        <SidebarContent />
+        <SidebarContent 
+          links={links} 
+          session={session} 
+          role={role} 
+          setIsSidebarOpen={setIsSidebarOpen} 
+        />
       </aside>
 
       {/* --- Mobile Sidebar Overlay --- */}
@@ -176,7 +184,12 @@ export default function DashboardLayout({ children }) {
       <aside
         className={`fixed inset-y-0 left-0 w-72 bg-white dark:bg-zinc-900 z-[60] md:hidden transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
-        <SidebarContent />
+        <SidebarContent 
+          links={links} 
+          session={session} 
+          role={role} 
+          setIsSidebarOpen={setIsSidebarOpen} 
+        />
       </aside>
 
       {/* --- Main Content Area --- */}

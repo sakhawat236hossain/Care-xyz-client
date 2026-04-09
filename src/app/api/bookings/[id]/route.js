@@ -20,3 +20,21 @@ export const GET = async (request, { params }) => {
         return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
     }
 };
+
+export const DELETE = async (request, { params }) => {
+    try {
+        const { id } = await params;
+        const bookingCollection = await dbConnect(collections.BOOKINGS);
+        
+        const result = await bookingCollection.deleteOne({ _id: new ObjectId(id) });
+
+        if (result.deletedCount === 0) {
+            return NextResponse.json({ message: "Booking not found" }, { status: 404 });
+        }
+
+        return NextResponse.json({ message: "Booking deleted successfully" }, { status: 200 });
+    } catch (error) {
+        console.error("Delete Error:", error);
+        return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
+    }
+};

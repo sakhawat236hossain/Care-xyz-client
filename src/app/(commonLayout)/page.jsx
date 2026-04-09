@@ -11,20 +11,22 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-zinc-50 dark:bg-black font-sans transition-colors duration-500">
       <Hero />
-
+      
       <StatsSection />
-
+      
+      
       <WhyChooseUs />
-
+      
       <HowItWorks />
-
+      
       <FeaturedCaregivers />
-
+      
       <Testimonials />
-
+      
       <FAQ />
-
+      
       <CallToAction />
+      <servicePage />
     </main>
   );
 }

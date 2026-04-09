@@ -2,14 +2,27 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
-import { Menu, X, Heart, LayoutDashboard, LogOut, LogIn } from 'lucide-react';
+import { Menu, X, Heart, LayoutDashboard, LogOut, LogIn, User, ChevronDown } from 'lucide-react';
+import Image from 'next/image';
 
 const Navbar = () => {
   const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // Mobile menu state
+  const [isProfileOpen, setIsProfileOpen] = useState(false); // Profile dropdown state
   const { data: session, status } = useSession();
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsProfileOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -35,7 +48,7 @@ const Navbar = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center">
-            <div className="flex items-center space-x-1">
+            <div className="flex items-center space-x-1 mr-6">
               {navLinks.map((link) => {
                 const isActive = pathname === link.path;
                 return (
@@ -55,55 +68,77 @@ const Navbar = () => {
                   </Link>
                 );
               })}
-              
-              {/* Dashboard Link (Simple Entry) */}
-              {status === "authenticated" && (
-                <Link 
-                  href="/dashboard" 
-                  className={`ml-2 flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${
-                    pathname.startsWith("/dashboard") 
-                    ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30" 
-                    : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-blue-50"
-                  }`}
-                >
-                  <LayoutDashboard size={14} />
-                  Dashboard
-                </Link>
-              )}
             </div>
             
-            <div className="h-5 w-[1px] bg-zinc-200 dark:bg-zinc-800 mx-6"></div>
-
-            {/* Auth Logic */}
-            <div className="flex items-center space-x-4">
+            {/* Auth Logic with Dropdown */}
+            <div className="flex items-center border-l border-zinc-200 dark:border-zinc-800 pl-6">
               {status === "authenticated" ? (
-                <div className="flex items-center gap-3">
-                  <div className="flex flex-col items-end mr-1 leading-tight">
-                    <span className="text-[9px] font-bold text-blue-500 uppercase tracking-widest">{session.user.role}</span>
-                    <span className="text-xs font-black text-zinc-800 dark:text-zinc-200">{session.user.name.split(' ')[0]}</span>
-                  </div>
-
+                <div className="relative" ref={dropdownRef}>
                   <button 
-                    onClick={() => signOut()} 
-                    className="cursor-pointer flex items-center gap-2 px-4 py-2.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-all font-bold text-sm"
+                    onClick={() => setIsProfileOpen(!isProfileOpen)}
+                    className="flex items-center gap-2 p-1 pr-3 rounded-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:shadow-md transition-all cursor-pointer"
                   >
-                    <LogOut size={18} />
-                    <span>Log Out</span>
+                    <div className="relative h-8 w-8 rounded-full overflow-hidden bg-blue-100 dark:bg-blue-900 flex items-center justify-center border border-blue-200">
+                      {session.user?.image ? (
+                        <Image 
+                          src={session.user.image} 
+                          alt="Profile" 
+                          fill 
+                          className="object-cover"
+                        />
+                      ) : (
+                        <User size={18} className="text-blue-600 dark:text-blue-400" />
+                      )}
+                    </div>
+                    <span className="text-sm font-bold text-zinc-700 dark:text-zinc-300">
+                      {session.user.name.split(' ')[0]}
+                    </span>
+                    <ChevronDown size={14} className={`text-zinc-400 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
                   </button>
+
+                  {/* Dropdown Menu */}
+                  {isProfileOpen && (
+                    <div className="absolute right-0 mt-3 w-56 bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-100 dark:border-zinc-800 py-2 z-50 animate-in fade-in zoom-in duration-200">
+                      <div className="px-4 py-2 border-b border-zinc-100 dark:border-zinc-800 mb-2">
+                        <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest">{session.user.role}</p>
+                        <p className="text-sm font-bold text-zinc-900 dark:text-white truncate">{session.user.email}</p>
+                      </div>
+                      
+                      <Link 
+                        href="/dashboard"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+                      >
+                        <LayoutDashboard size={18} className="text-zinc-400" />
+                        Dashboard
+                      </Link>
+                      
+                      <button 
+                        onClick={() => {
+                            setIsProfileOpen(false);
+                            signOut();
+                        }}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors cursor-pointer"
+                      >
+                        <LogOut size={18} />
+                        Log Out
+                      </button>
+                    </div>
+                  )}
                 </div>
               ) : (
-                <>
+                <div className="flex items-center space-x-4">
                   <button 
                     onClick={() => signIn()} 
-                    className="cursor-pointer text-sm font-bold text-zinc-600 dark:text-zinc-400 hover:text-blue-600 transition flex items-center gap-2"
+                    className="text-sm font-bold text-zinc-600 dark:text-zinc-400 hover:text-blue-600 transition flex items-center gap-2 cursor-pointer"
                   >
                     <LogIn size={18} />
                     Log In
                   </button>
-                  <Link href="/register" className="cursor-pointer bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:scale-105 transition-all shadow-xl shadow-blue-500/20">
+                  <Link href="/register" className="bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:scale-105 transition-all shadow-xl shadow-blue-500/20">
                     Register
                   </Link>
-                </>
+                </div>
               )}
             </div>
           </div>
@@ -117,7 +152,7 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Mobile Dropdown */}
+        {/* Mobile Dropdown (Responsive) */}
         {isOpen && (
           <div className="md:hidden pb-8 pt-4 space-y-2">
             {navLinks.map((link) => {
@@ -138,25 +173,36 @@ const Navbar = () => {
               );
             })}
             
-            <div className="grid grid-cols-1 gap-3 pt-6">
+            <div className="pt-6 border-t border-zinc-100 dark:border-zinc-800 mt-4">
               {status === "authenticated" ? (
-                <>
+                <div className="space-y-3">
+                  <div className="px-5 mb-4 flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-full bg-blue-100 overflow-hidden relative">
+                         {session.user?.image ? (
+                            <Image src={session.user.image} alt="user" fill className="object-cover" />
+                         ) : <User className="m-auto mt-2 text-blue-600" />}
+                    </div>
+                    <div>
+                        <p className="text-sm font-black text-zinc-900 dark:text-white">{session.user.name}</p>
+                        <p className="text-[10px] font-bold text-blue-600 uppercase">{session.user.role}</p>
+                    </div>
+                  </div>
                   <Link 
                     href="/dashboard" 
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-center gap-2 py-4 bg-zinc-900 text-white rounded-2xl font-bold shadow-lg"
+                    className="flex items-center justify-center gap-2 py-4 bg-zinc-900 dark:bg-white dark:text-zinc-900 text-white rounded-2xl font-bold shadow-lg"
                   >
                     <LayoutDashboard size={18} />
-                    Dashboard ({session.user.role})
+                    Dashboard
                   </Link>
                   <button 
                     onClick={() => { signOut(); setIsOpen(false); }} 
-                    className="py-4 bg-red-50 text-red-600 rounded-2xl font-bold flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full py-4 bg-red-50 text-red-600 rounded-2xl font-bold flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <LogOut size={18} />
                     Log Out
                   </button>
-                </>
+                </div>
               ) : (
                 <div className="grid grid-cols-2 gap-3">
                   <button 
