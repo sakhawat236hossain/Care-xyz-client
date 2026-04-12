@@ -7,14 +7,27 @@ export const metadata = {
 
 export default async function ServicePage() {
   let services = [];
+  
   try {
-    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/services`, { 
-      cache: 'no-store' 
+    // ১. লাইভ এবং লোকাল উভয় জায়গার জন্য বেজ ইউআরএল সেট করা
+    // আপনার লাইভ ইউআরএল ডাইনামিকভাবে নেওয়ার চেষ্টা করবে
+    const baseUrl = process.env.NEXTAUTH_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+
+    const res = await fetch(`${baseUrl}/api/services`, { 
+      cache: 'no-store',
+      // অনেক সময় লাইভ সার্ভারে SSL সার্টিফিকেটের কারণে ফেচ আটকে যায়, তাই নিচের হেডারটি সেফটি হিসেবে কাজ করে
+      headers: {
+        'Content-Type': 'application/json',
+      }
     });
     
+    if (!res.ok) {
+        throw new Error(`Failed to fetch: ${res.status}`);
+    }
+
     const data = await res.json();
-    
     services = Array.isArray(data) ? data : (data.services || []);
+    
   } catch (error) {
     console.error("Error fetching services:", error);
     services = []; 
@@ -32,14 +45,14 @@ export default async function ServicePage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.length > 0 ? (
+        <div className="grid grid-cols-1 md:md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {services && services.length > 0 ? (
             services.map((service) => (
-              <ServiceCard key={service._id} service={service} />
+              <ServiceCard key={service._id?.toString() || Math.random()} service={service} />
             ))
           ) : (
-            <div className="col-span-full text-center py-20">
-              <p className="text-zinc-400">No services available at the moment.</p>
+            <div className="col-span-full text-center py-20 border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-3xl">
+              <p className="text-zinc-400 font-medium">No services available at the moment.</p>
             </div>
           )}
         </div>
