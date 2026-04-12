@@ -82,12 +82,12 @@ const RegisterForm = () => {
 
         {/* Social Buttons */}
         <div className="mt-6 grid grid-cols-2 gap-4">
-          <button onClick={() => signIn("google", { callbackUrl: "/" })} type="button" className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 font-semibold text-sm cursor-pointer"><img src="https://www.svgrepo.com/show/355037/google.svg" className="w-5 h-5" alt="Google" /> Google</button>
-          <button onClick={() => signIn("github", { callbackUrl: "/" })} type="button" className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 font-semibold text-sm cursor-pointer"><img src="https://www.svgrepo.com/show/512317/github-142.svg" className="w-5 h-5 dark:invert" alt="GitHub" /> GitHub</button>
+          <button onClick={() => signIn("google", { callbackUrl: "/" })} type="button" className="flex items-center justify-center cursor-pointer gap-2 py-3 px-4 rounded-xl border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 font-semibold text-sm cursor-pointer"><img src="https://www.svgrepo.com/show/355037/google.svg" className="w-5 h-5" alt="Google" /> Google</button>
+          <button onClick={() => signIn("github", { callbackUrl: "/" })} type="button" className="flex items-center justify-center cursor-pointer gap-2 py-3 px-4 rounded-xl border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 font-semibold text-sm cursor-pointer"><img src="https://www.svgrepo.com/show/512317/github-142.svg" className="w-5 h-5 dark:invert" alt="GitHub" /> GitHub</button>
         </div>
 
         <p className="mt-6 text-center text-sm text-zinc-500">
-          Already have an account? <Link href="/login" className="text-blue-600 font-bold hover:underline">Log In</Link>
+          Already have an account? <Link href="/login" className="text-blue-600 cursor-pointer font-bold hover:underline">Log In</Link>
         </p>
       </form>
     </div>

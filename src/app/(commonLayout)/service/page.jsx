@@ -5,10 +5,20 @@ export const metadata = {
   description: "Find the best baby care and elderly services near you.",
 };
 
-
-export default async function servicesPage() {
-  const res = await fetch(`${process.env.NEXTAUTH_URL}/api/services`, { cache: 'no-store' });
-  const services = await res.json();
+export default async function ServicePage() {
+  let services = [];
+  try {
+    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/services`, { 
+      cache: 'no-store' 
+    });
+    
+    const data = await res.json();
+    
+    services = Array.isArray(data) ? data : (data.services || []);
+  } catch (error) {
+    console.error("Error fetching services:", error);
+    services = []; 
+  }
 
   return (
     <main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 py-16 px-6">
@@ -23,9 +33,15 @@ export default async function servicesPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services?.map((service) => (
-            <ServiceCard key={service._id} service={service} />
-          ))}
+          {services.length > 0 ? (
+            services.map((service) => (
+              <ServiceCard key={service._id} service={service} />
+            ))
+          ) : (
+            <div className="col-span-full text-center py-20">
+              <p className="text-zinc-400">No services available at the moment.</p>
+            </div>
+          )}
         </div>
       </div>
     </main>
