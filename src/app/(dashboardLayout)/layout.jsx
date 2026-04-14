@@ -16,6 +16,7 @@ import {
   Menu,
   X,
   PlusCircle,
+  MessageSquare,
 } from "lucide-react";
 
 function SidebarContent({ links, session, role, setIsSidebarOpen }) {
@@ -137,6 +138,12 @@ export default function DashboardLayout({ children }) {
             path: "/dashboard/user/profile",
             icon: <UserCircle size={20} />,
           },
+          {
+            name:"Messages",
+            path: "/dashboard/admin/all-messages",
+            icon: <MessageSquare size={20} />
+
+          }
         ]
       : [
           {
