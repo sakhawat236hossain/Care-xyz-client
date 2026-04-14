@@ -19,3 +19,17 @@ export async function POST(req) {
   }
 }
 
+export async function GET() {
+  try {
+    const messageCollection = await dbConnect(collections.MESSAGES);
+    
+    const messages = await messageCollection
+      .find({})
+      .sort({ createdAt: -1 })
+      .toArray();
+
+    return NextResponse.json({ success: true, data: messages });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}
