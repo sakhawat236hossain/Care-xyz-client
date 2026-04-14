@@ -37,4 +37,5 @@ export const collections = {
   USERS: "users",
   BOOKINGS: "bookings",
   CAREGIVERS: "caregivers",
+  MESSAGES: "messages",
 };
