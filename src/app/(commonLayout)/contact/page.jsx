@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Mail, 
   Phone, 
@@ -9,13 +9,46 @@ import {
   Facebook, 
   Twitter, 
   Github,
-  CheckCircle2
+  CheckCircle2,
+  Loader2
 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const Contact = () => {
-  const handleSubmit = (e) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Message sent to Sakhawat!");
+    setLoading(true);
+
+    const formData = {
+      name: e.target.name.value,
+      email: e.target.email.value,
+      message: e.target.message.value,
+      subject: "General Inquiry from Contact Page", // ডিফল্ট সাবজেক্ট
+    };
+
+    try {
+      const res = await fetch("/api/admin/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (res.ok) {
+        toast.success("Message sent successfully to Sakhawat!");
+        e.target.reset(); 
+      } else {
+        throw new Error("Failed to send message");
+      }
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -40,7 +73,7 @@ const Contact = () => {
       <section className="px-4 sm:px-6">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           
-          {/* Left Side: Info (4 Columns on Large Screen) */}
+          {/* Left Side: Info */}
           <div className="lg:col-span-4 space-y-4">
             <div className="p-6 bg-white dark:bg-zinc-900 rounded-[1.5rem] border border-zinc-100 dark:border-zinc-800 shadow-sm space-y-6">
               <h3 className="text-lg font-black dark:text-white">Contact Info</h3>
@@ -77,7 +110,7 @@ const Contact = () => {
               </div>
             </div>
 
-            {/* Availability Box (Mobile Friendly) */}
+            {/* Availability Box */}
             <div className="p-5 bg-blue-600 rounded-[1.5rem] text-white relative overflow-hidden group">
               <div className="relative z-10 space-y-2">
                 <div className="flex items-center gap-2 text-[11px] font-bold text-blue-100">
@@ -89,27 +122,34 @@ const Contact = () => {
             </div>
           </div>
 
-          {/* Right Side: Form (8 Columns on Large Screen) */}
+          {/* Right Side: Form */}
           <div className="lg:col-span-8 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-[1.5rem] border border-zinc-100 dark:border-zinc-800 shadow-sm">
             <h3 className="text-xl font-black text-zinc-900 dark:text-white mb-6">Send Message</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 ml-1">Full Name</label>
-                  <input type="text" placeholder="John Doe" className="w-full px-4 py-3 text-sm rounded-xl bg-zinc-50 dark:bg-zinc-800 border-none focus:ring-1 focus:ring-blue-600 outline-none transition-all dark:text-white" required />
+                  <input name="name" type="text" placeholder="John Doe" className="w-full px-4 py-3 text-sm rounded-xl bg-zinc-50 dark:bg-zinc-800 border-none focus:ring-1 focus:ring-blue-600 outline-none transition-all dark:text-white" required />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 ml-1">Email</label>
-                  <input type="email" placeholder="example@mail.com" className="w-full px-4 py-3 text-sm rounded-xl bg-zinc-50 dark:bg-zinc-800 border-none focus:ring-1 focus:ring-blue-600 outline-none transition-all dark:text-white" required />
+                  <input name="email" type="email" placeholder="example@mail.com" className="w-full px-4 py-3 text-sm rounded-xl bg-zinc-50 dark:bg-zinc-800 border-none focus:ring-1 focus:ring-blue-600 outline-none transition-all dark:text-white" required />
                 </div>
               </div>
               <div className="space-y-1.5">
                 <label className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 ml-1">Message</label>
-                <textarea rows="4" placeholder="How can I help you?" className="w-full px-4 py-3 text-sm rounded-xl bg-zinc-50 dark:bg-zinc-800 border-none focus:ring-1 focus:ring-blue-600 outline-none transition-all dark:text-white resize-none" required></textarea>
+                <textarea name="message" rows="4" placeholder="How can I help you?" className="w-full px-4 py-3 text-sm rounded-xl bg-zinc-50 dark:bg-zinc-800 border-none focus:ring-1 focus:ring-blue-600 outline-none transition-all dark:text-white resize-none" required></textarea>
               </div>
-              <button className="w-full sm:w-auto px-10 py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm shadow-md transition-all active:scale-95 flex items-center justify-center gap-2 group">
-                Send Message
-                <Send size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+              
+              <button 
+                disabled={loading}
+                className="w-full sm:w-auto px-10 py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm shadow-md transition-all active:scale-95 flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {loading ? (
+                  <>Sending... <Loader2 size={16} className="animate-spin" /></>
+                ) : (
+                  <>Send Message <Send size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></>
+                )}
               </button>
             </form>
           </div>
