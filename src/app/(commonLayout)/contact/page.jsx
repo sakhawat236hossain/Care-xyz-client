@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useSession } from "next-auth/react"; // সেশন থেকে ডাটা নিতে
+import { useSession } from "next-auth/react"; 
 import { 
   Mail, Phone, Send, Globe, Facebook, Twitter, Github,
   CheckCircle2, Loader2, User, MessageSquare, Hash
@@ -9,7 +9,7 @@ import {
 import toast from 'react-hot-toast';
 
 const Contact = () => {
-  const { data: session } = useSession(); // ইউজার সেশন
+  const { data: session } = useSession(); 
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
