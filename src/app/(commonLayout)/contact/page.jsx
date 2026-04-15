@@ -139,7 +139,7 @@ const Contact = () => {
               
               <button 
                 disabled={loading}
-                className="w-full md:w-max px-12 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold shadow-lg shadow-blue-600/20 transition-all active:scale-95 flex items-center justify-center gap-3 group disabled:opacity-70"
+                className="w-full cursor-pointer md:w-max px-12 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold shadow-lg shadow-blue-600/20 transition-all active:scale-95 flex items-center justify-center gap-3 group disabled:opacity-70"
               >
                 {loading ? (
                   <>Sending Request... <Loader2 size={20} className="animate-spin" /></>
