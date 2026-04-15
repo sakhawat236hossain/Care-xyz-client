@@ -18,3 +18,12 @@ export async function POST(request) {
   }
 }
 
+export async function GET() {
+  try {
+    const feedbackCollection = await dbConnect("feedbacks");
+    const data = await feedbackCollection.find({}).sort({ createdAt: -1 }).toArray();
+    return NextResponse.json({ data }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to fetch" }, { status: 500 });
+  }
+}
