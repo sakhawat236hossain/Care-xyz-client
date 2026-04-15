@@ -6,6 +6,7 @@ import FeaturedCaregivers from "@/components/HomePage/FeaturedCaregivers/Feature
 import Testimonials from "@/components/HomePage/Testimonials/Testimonials";
 import FAQ from "@/components/HomePage/FAQ/FAQ";
 import CallToAction from "@/components/HomePage/CallToAction/CallToAction";
+import FeedbackSection from "@/components/HomePage/FeedbackSection/page";
 
 export default function Home() {
   return (
@@ -27,6 +28,7 @@ export default function Home() {
       
       <CallToAction />
       <servicePage />
+      <FeedbackSection />
     </main>
   );
 }
